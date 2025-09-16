@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://postgres:5432/midas_core}
+    username: ${DATABASE_USERNAME:midas_user}
+    password: ${DATABASE_PASSWORD:midas_password}
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 10
+  
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      properties:
+        security.protocol: ${KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
+        sasl.mechanism: ${KAFKA_SASL_MECHANISM:PLAIN}
+        sasl.jaas.config: ${KAFKA_SASL_JAAS_CONFIG:}
+    producer:
+      properties:
+        security.protocol: ${KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
+        sasl.mechanism: ${KAFKA_SASL_MECHANISM:PLAIN}
+        sasl.jaas.config: ${KAFKA_SASL_JAAS_CONFIG:}
+
+  security:
+    jwt:
+      secret: ${JWT_SECRET:midas-core-jwt-secret-key-2024-very-secure-and-long}
+      expiration: ${JWT_EXPIRATION:86400000}
+
+logging:
+  level:
+    com.midascore: INFO
+    org.springframework.kafka: WARN
+    org.hibernate.SQL: WARN
+  file:
+    name: /var/log/midas-core/application.log
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus

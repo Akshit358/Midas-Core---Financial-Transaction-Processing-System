@@ -1,0 +1,38 @@
+package com.midascore.model;
+
+public enum AuditLogType {
+    // Transaction events
+    TRANSACTION_CREATED,
+    TRANSACTION_UPDATED,
+    TRANSACTION_CANCELLED,
+    TRANSACTION_FAILED,
+    TRANSACTION_REVERSED,
+    
+    // Account events
+    ACCOUNT_CREATED,
+    ACCOUNT_UPDATED,
+    ACCOUNT_FROZEN,
+    ACCOUNT_UNFROZEN,
+    ACCOUNT_BALANCE_CHANGE,
+    
+    // Customer events
+    CUSTOMER_CREATED,
+    CUSTOMER_UPDATED,
+    CUSTOMER_DELETED,
+    CUSTOMER_VERIFIED,
+    
+    // User events
+    USER_CREATED,
+    USER_UPDATED,
+    USER_DELETED,
+    USER_LOGIN,
+    USER_LOGOUT,
+    PASSWORD_CHANGE,
+    ACCOUNT_LOCKED,
+    ACCOUNT_UNLOCKED,
+    
+    // System events
+    SYSTEM_ERROR,
+    CONFIGURATION_CHANGE,
+    SECURITY_EVENT
+}

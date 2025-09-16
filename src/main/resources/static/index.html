@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midas Core - Financial Transaction Processing System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-coins"></i>
+                <span>Midas Core</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#demo" class="nav-link">Demo</a>
+                <a href="#api" class="nav-link">API Docs</a>
+                <a href="#status" class="nav-link">Status</a>
+            </div>
+            <div class="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="gradient-text">Midas Core</span>
+                    <br>Financial Transaction Processing System
+                </h1>
+                <p class="hero-description">
+                    Enterprise-grade financial transaction processing platform built with Spring Boot, 
+                    featuring real-time processing, comprehensive security, and advanced monitoring capabilities.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToSection('demo')">
+                        <i class="fas fa-play"></i> Try Demo
+                    </button>
+                    <button class="btn btn-secondary" onclick="scrollToSection('api')">
+                        <i class="fas fa-code"></i> View API
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number" id="customers-count">0</div>
+                        <div class="stat-label">Customers</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="accounts-count">0</div>
+                        <div class="stat-label">Accounts</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="transactions-count">0</div>
+                        <div class="stat-label">Transactions</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="system-status">UP</div>
+                        <div class="stat-label">System Status</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <div class="dashboard-header">
+                        <div class="dashboard-title">System Dashboard</div>
+                        <div class="status-indicator online"></div>
+                    </div>
+                    <div class="dashboard-content">
+                        <div class="metric-card">
+                            <i class="fas fa-users"></i>
+                            <div class="metric-value">1,247</div>
+                            <div class="metric-label">Active Users</div>
+                        </div>
+                        <div class="metric-card">
+                            <i class="fas fa-credit-card"></i>
+                            <div class="metric-value">$2.4M</div>
+                            <div class="metric-label">Processed Today</div>
+                        </div>
+                        <div class="metric-card">
+                            <i class="fas fa-chart-line"></i>
+                            <div class="metric-value">99.9%</div>
+                            <div class="metric-label">Uptime</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Enterprise Features</h2>
+                <p class="section-description">
+                    Built with modern technologies and enterprise-grade security
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Advanced Security</h3>
+                    <p>JWT authentication, role-based access control, and comprehensive audit logging</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Real-time Processing</h3>
+                    <p>High-performance transaction processing with instant validation and execution</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Advanced Analytics</h3>
+                    <p>Comprehensive metrics, monitoring, and business intelligence capabilities</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>ACID Compliance</h3>
+                    <p>Full ACID compliance ensuring data integrity and transaction reliability</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>Microservices Ready</h3>
+                    <p>Event-driven architecture with Apache Kafka for scalable microservices</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>RESTful API</h3>
+                    <p>Comprehensive REST API with OpenAPI documentation and testing interface</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="demo">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Interactive Demo</h2>
+                <p class="section-description">
+                    Experience the power of Midas Core with our interactive demo
+                </p>
+            </div>
+            <div class="demo-container">
+                <div class="demo-tabs">
+                    <button class="demo-tab active" onclick="showDemoTab('customers')">
+                        <i class="fas fa-users"></i> Customers
+                    </button>
+                    <button class="demo-tab" onclick="showDemoTab('accounts')">
+                        <i class="fas fa-credit-card"></i> Accounts
+                    </button>
+                    <button class="demo-tab" onclick="showDemoTab('transactions')">
+                        <i class="fas fa-exchange-alt"></i> Transactions
+                    </button>
+                </div>
+                <div class="demo-content">
+                    <div id="customers-demo" class="demo-panel active">
+                        <h3>Customer Management</h3>
+                        <div class="demo-form">
+                            <input type="text" id="firstName" placeholder="First Name" required>
+                            <input type="text" id="lastName" placeholder="Last Name" required>
+                            <input type="email" id="email" placeholder="Email" required>
+                            <input type="tel" id="phone" placeholder="Phone">
+                            <button class="btn btn-primary" onclick="createCustomer()">
+                                <i class="fas fa-plus"></i> Create Customer
+                            </button>
+                        </div>
+                        <div class="demo-results" id="customers-results">
+                            <h4>Recent Customers</h4>
+                            <div class="results-list" id="customers-list">
+                                <!-- Results will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                    <div id="accounts-demo" class="demo-panel">
+                        <h3>Account Management</h3>
+                        <div class="demo-form">
+                            <select id="customerSelect">
+                                <option value="">Select Customer</option>
+                            </select>
+                            <select id="accountType">
+                                <option value="CHECKING">Checking</option>
+                                <option value="SAVINGS">Savings</option>
+                                <option value="BUSINESS">Business</option>
+                            </select>
+                            <input type="text" id="currency" placeholder="Currency (USD)" value="USD">
+                            <button class="btn btn-primary" onclick="createAccount()">
+                                <i class="fas fa-plus"></i> Create Account
+                            </button>
+                        </div>
+                        <div class="demo-results" id="accounts-results">
+                            <h4>Recent Accounts</h4>
+                            <div class="results-list" id="accounts-list">
+                                <!-- Results will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                    <div id="transactions-demo" class="demo-panel">
+                        <h3>Transaction Processing</h3>
+                        <div class="demo-form">
+                            <select id="transactionType">
+                                <option value="DEPOSIT">Deposit</option>
+                                <option value="WITHDRAWAL">Withdrawal</option>
+                                <option value="TRANSFER">Transfer</option>
+                            </select>
+                            <input type="text" id="fromAccount" placeholder="From Account (for withdrawal/transfer)">
+                            <input type="text" id="toAccount" placeholder="To Account (for deposit/transfer)">
+                            <input type="number" id="amount" placeholder="Amount" step="0.01" min="0">
+                            <input type="text" id="description" placeholder="Description">
+                            <button class="btn btn-primary" onclick="processTransaction()">
+                                <i class="fas fa-exchange-alt"></i> Process Transaction
+                            </button>
+                        </div>
+                        <div class="demo-results" id="transactions-results">
+                            <h4>Recent Transactions</h4>
+                            <div class="results-list" id="transactions-list">
+                                <!-- Results will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Documentation Section -->
+    <section id="api" class="api">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">API Documentation</h2>
+                <p class="section-description">
+                    Comprehensive REST API with interactive testing capabilities
+                </p>
+            </div>
+            <div class="api-container">
+                <div class="api-endpoints">
+                    <h3>Available Endpoints</h3>
+                    <div class="endpoint-list">
+                        <div class="endpoint-item">
+                            <span class="method get">GET</span>
+                            <span class="path">/api/v1/customers</span>
+                            <span class="description">Get all customers</span>
+                        </div>
+                        <div class="endpoint-item">
+                            <span class="method post">POST</span>
+                            <span class="path">/api/v1/customers</span>
+                            <span class="description">Create new customer</span>
+                        </div>
+                        <div class="endpoint-item">
+                            <span class="method get">GET</span>
+                            <span class="path">/api/v1/accounts</span>
+                            <span class="description">Get all accounts</span>
+                        </div>
+                        <div class="endpoint-item">
+                            <span class="method post">POST</span>
+                            <span class="path">/api/v1/accounts</span>
+                            <span class="description">Create new account</span>
+                        </div>
+                        <div class="endpoint-item">
+                            <span class="method post">POST</span>
+                            <span class="path">/api/v1/transactions/deposit</span>
+                            <span class="description">Process deposit</span>
+                        </div>
+                        <div class="endpoint-item">
+                            <span class="method post">POST</span>
+                            <span class="path">/api/v1/transactions/withdraw</span>
+                            <span class="description">Process withdrawal</span>
+                        </div>
+                        <div class="endpoint-item">
+                            <span class="method post">POST</span>
+                            <span class="path">/api/v1/transactions/transfer</span>
+                            <span class="description">Process transfer</span>
+                        </div>
+                    </div>
+                    <div class="api-actions">
+                        <button class="btn btn-primary" onclick="openSwaggerUI()">
+                            <i class="fas fa-external-link-alt"></i> Open Swagger UI
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadAPI()">
+                            <i class="fas fa-download"></i> Download API Spec
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Status Section -->
+    <section id="status" class="status">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">System Status</h2>
+                <p class="section-description">
+                    Real-time system health and performance metrics
+                </p>
+            </div>
+            <div class="status-grid">
+                <div class="status-card">
+                    <div class="status-header">
+                        <h3>System Health</h3>
+                        <div class="status-indicator" id="system-health">UP</div>
+                    </div>
+                    <div class="status-details" id="health-details">
+                        <!-- Health details will be populated here -->
+                    </div>
+                </div>
+                <div class="status-card">
+                    <div class="status-header">
+                        <h3>Database Status</h3>
+                        <div class="status-indicator" id="db-status">UP</div>
+                    </div>
+                    <div class="status-details" id="db-details">
+                        <!-- Database details will be populated here -->
+                    </div>
+                </div>
+                <div class="status-card">
+                    <div class="status-header">
+                        <h3>Performance Metrics</h3>
+                        <div class="status-indicator" id="perf-status">GOOD</div>
+                    </div>
+                    <div class="status-details" id="perf-details">
+                        <!-- Performance details will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Midas Core</h3>
+                    <p>Enterprise-grade financial transaction processing system</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Features</h4>
+                    <ul>
+                        <li><a href="#features">Security</a></li>
+                        <li><a href="#features">Analytics</a></li>
+                        <li><a href="#features">API</a></li>
+                        <li><a href="#features">Monitoring</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#api">API Documentation</a></li>
+                        <li><a href="#demo">Demo</a></li>
+                        <li><a href="#status">Status</a></li>
+                        <li><a href="/h2-console">Database Console</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>support@midascore.com</p>
+                    <p>+1 (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Midas Core. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

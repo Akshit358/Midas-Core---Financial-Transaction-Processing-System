@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: midas-core
+  labels:
+    app: midas-core
+    version: v1.0.0
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: midas-core
+  template:
+    metadata:
+      labels:
+        app: midas-core
+        version: v1.0.0
+    spec:
+      containers:
+      - name: midas-core
+        image: midas-core:1.0.0
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "prod"
+        - name: SPRING_DATASOURCE_URL
+          valueFrom:
+            secretKeyRef:
+              name: midas-core-secrets
+              key: database-url
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: midas-core-secrets
+              key: database-username
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: midas-core-secrets
+              key: database-password
+        - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+          value: "kafka-service:9092"
+        - name: SPRING_SECURITY_JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: midas-core-secrets
+              key: jwt-secret
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /api/actuator/health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /api/actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: midas-core-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: midas-core-service
+  labels:
+    app: midas-core
+spec:
+  selector:
+    app: midas-core
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: midas-core-config
+data:
+  application-prod.yml: |
+    spring:
+      datasource:
+        url: ${SPRING_DATASOURCE_URL}
+        username: ${SPRING_DATASOURCE_USERNAME}
+        password: ${SPRING_DATASOURCE_PASSWORD}
+      kafka:
+        bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS}
+    logging:
+      level:
+        com.midascore: INFO
+        org.springframework.security: WARN
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: midas-core-secrets
+type: Opaque
+data:
+  database-url: cG9zdGdyZXNxbDovL2xvY2FsaG9zdDo1NDMyL21pZGFzX2NvcmVfZGI=
+  database-username: cG9zdGdyZXM=
+  database-password: cG9zdGdyZXM=
+  jwt-secret: bXlTZWNyZXRLZXkxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTA=
