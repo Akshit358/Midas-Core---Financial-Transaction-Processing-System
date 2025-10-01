@@ -302,7 +302,7 @@ async function processTransaction() {
                     return;
                 }
                 endpoint = '/api/v1/transactions/deposit';
-                transactionData.toAccountNumber = toAccount;
+                transactionData.accountNumber = toAccount;
                 break;
             case 'WITHDRAWAL':
                 if (!fromAccount) {
@@ -310,7 +310,7 @@ async function processTransaction() {
                     return;
                 }
                 endpoint = '/api/v1/transactions/withdraw';
-                transactionData.fromAccountNumber = fromAccount;
+                transactionData.accountNumber = fromAccount;
                 break;
             case 'TRANSFER':
                 if (!fromAccount || !toAccount) {
@@ -354,6 +354,19 @@ function displayCustomers(customersList) {
             <small>Status: ${customer.isActive ? 'Active' : 'Inactive'}</small>
         </div>
     `).join('');
+    
+    // Also populate customer dropdown for account creation
+    populateCustomerDropdown(customersList);
+}
+
+function populateCustomerDropdown(customersList) {
+    const customerSelect = document.getElementById('customerSelect');
+    if (!customerSelect) return;
+    
+    customerSelect.innerHTML = '<option value="">Select Customer</option>' + 
+        customersList.map(customer => 
+            `<option value="${customer.id}">${customer.firstName} ${customer.lastName} (${customer.email})</option>`
+        ).join('');
 }
 
 function displayAccounts(accountsList) {
@@ -368,6 +381,28 @@ function displayAccounts(accountsList) {
             <small>Status: ${account.isActive ? 'Active' : 'Inactive'}</small>
         </div>
     `).join('');
+    
+    // Also populate account dropdowns for transactions
+    populateAccountDropdowns(accountsList);
+}
+
+function populateAccountDropdowns(accountsList) {
+    const fromAccountSelect = document.getElementById('fromAccount');
+    const toAccountSelect = document.getElementById('toAccount');
+    
+    if (fromAccountSelect) {
+        fromAccountSelect.innerHTML = '<option value="">Select Account</option>' + 
+            accountsList.map(account => 
+                `<option value="${account.accountNumber}">${account.accountNumber} (${account.accountType} - ${account.currency} ${account.balance})</option>`
+            ).join('');
+    }
+    
+    if (toAccountSelect) {
+        toAccountSelect.innerHTML = '<option value="">Select Account</option>' + 
+            accountsList.map(account => 
+                `<option value="${account.accountNumber}">${account.accountNumber} (${account.accountType} - ${account.currency} ${account.balance})</option>`
+            ).join('');
+    }
 }
 
 function displayTransactions(transactionsList) {

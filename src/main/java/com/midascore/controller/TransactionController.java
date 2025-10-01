@@ -6,7 +6,7 @@ import com.midascore.model.Transaction;
 import com.midascore.model.TransactionStatus;
 import com.midascore.model.TransactionType;
 import com.midascore.service.TransactionService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/transactions")
@@ -111,7 +112,7 @@ public class TransactionController {
             transactions = transactionService.getTransactionsByStatus(status);
             transactions = transactions.stream()
                     .filter(t -> t.getTransactionType() == type)
-                    .toList();
+                    .collect(Collectors.toList());
         } else if (status != null) {
             transactions = transactionService.getTransactionsByStatus(status);
         } else if (type != null) {

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midas Core - Transfer Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin: 10px 0; }
+        label { display: block; margin-bottom: 5px; }
+        select, input { width: 300px; padding: 8px; margin-bottom: 10px; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin: 20px 0; padding: 10px; background: #f8f9fa; border: 1px solid #dee2e6; }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+    </style>
+</head>
+<body>
+    <h1>Midas Core - Transfer Test</h1>
+    
+    <div class="form-group">
+        <label for="fromAccount">From Account:</label>
+        <select id="fromAccount">
+            <option value="">Select From Account</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="toAccount">To Account:</label>
+        <select id="toAccount">
+            <option value="">Select To Account</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" placeholder="Enter amount" step="0.01" min="0">
+    </div>
+    
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <input type="text" id="description" placeholder="Enter description">
+    </div>
+    
+    <button onclick="processTransfer()">Process Transfer</button>
+    
+    <div id="result" class="result" style="display: none;"></div>
+    
+    <script>
+        // Load accounts when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAccounts();
+        });
+        
+        async function loadAccounts() {
+            try {
+                const response = await fetch('/api/v1/accounts');
+                const accounts = await response.json();
+                
+                const fromSelect = document.getElementById('fromAccount');
+                const toSelect = document.getElementById('toAccount');
+                
+                // Clear existing options
+                fromSelect.innerHTML = '<option value="">Select From Account</option>';
+                toSelect.innerHTML = '<option value="">Select To Account</option>';
+                
+                // Add account options
+                accounts.forEach(account => {
+                    const option = `<option value="${account.accountNumber}">${account.accountNumber} (${account.accountType} - ${account.currency} ${account.balance})</option>`;
+                    fromSelect.innerHTML += option;
+                    toSelect.innerHTML += option;
+                });
+                
+                console.log('Accounts loaded:', accounts);
+            } catch (error) {
+                console.error('Failed to load accounts:', error);
+                showResult('Failed to load accounts: ' + error.message, 'error');
+            }
+        }
+        
+        async function processTransfer() {
+            const fromAccount = document.getElementById('fromAccount').value;
+            const toAccount = document.getElementById('toAccount').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const description = document.getElementById('description').value;
+            
+            if (!fromAccount || !toAccount) {
+                showResult('Please select both from and to accounts', 'error');
+                return;
+            }
+            
+            if (!amount || amount <= 0) {
+                showResult('Please enter a valid amount', 'error');
+                return;
+            }
+            
+            if (fromAccount === toAccount) {
+                showResult('Cannot transfer to the same account', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/v1/transactions/transfer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        fromAccountNumber: fromAccount,
+                        toAccountNumber: toAccount,
+                        amount: amount,
+                        description: description || 'Transfer transaction'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResult(`Transfer successful! Transaction ID: ${result.transactionId}`, 'success');
+                    // Reload accounts to show updated balances
+                    loadAccounts();
+                } else {
+                    showResult(`Transfer failed: ${result.message || result.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('Transfer error:', error);
+                showResult('Transfer failed: ' + error.message, 'error');
+            }
+        }
+        
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = message;
+            resultDiv.className = `result ${type}`;
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
+

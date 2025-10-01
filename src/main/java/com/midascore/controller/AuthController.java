@@ -6,7 +6,7 @@ import com.midascore.dto.RegisterRequest;
 import com.midascore.model.User;
 import com.midascore.security.JwtTokenProvider;
 import com.midascore.service.UserService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

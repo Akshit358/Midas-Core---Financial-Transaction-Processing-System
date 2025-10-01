@@ -1,7 +1,7 @@
 package com.midascore.dto;
 
 import com.midascore.model.AccountType;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public class CreateAccountRequest {

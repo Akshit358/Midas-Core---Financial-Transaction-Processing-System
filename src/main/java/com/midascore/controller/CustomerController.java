@@ -3,7 +3,7 @@ package com.midascore.controller;
 import com.midascore.dto.CreateCustomerRequest;
 import com.midascore.model.Customer;
 import com.midascore.service.CustomerService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

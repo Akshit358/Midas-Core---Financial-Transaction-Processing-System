@@ -52,25 +52,26 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf.disable())
-            .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> 
-                auth.requestMatchers("/api/v1/auth/**").permitAll()
-                    .requestMatchers("/api/v1/customers").permitAll() // Allow customer creation for demo
-                    .requestMatchers("/api/v1/accounts").permitAll() // Allow account creation for demo
-                    .requestMatchers("/api/v1/transactions/**").permitAll() // Allow transactions for demo
-                    .requestMatchers("/h2-console/**").permitAll()
-                    .requestMatchers("/actuator/**").permitAll()
-                    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                    .requestMatchers("/", "/index.html").permitAll()
-                    .requestMatchers("/health").permitAll()
-                    .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
-                    .anyRequest().authenticated()
-            );
-        
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.cors().and()
+            .csrf().disable()
+            .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+            .authorizeRequests()
+                .antMatchers("/api/v1/auth/**").permitAll()
+                .antMatchers("/api/v1/customers").permitAll() // Allow customer creation for demo
+                .antMatchers("/api/v1/accounts").permitAll() // Allow account creation for demo
+                .antMatchers("/api/v1/transactions/**").permitAll() // Allow transactions for demo
+                .antMatchers("/api/v1/database/**").permitAll() // Allow database management for demo
+                .antMatchers("/api/v1/cache/**").permitAll() // Allow cache management for demo
+                .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/actuator/**").permitAll()
+                .antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/webjars/**").permitAll()
+                .antMatchers("/", "/index.html", "/test_transfer.html", "/transfer-test.html").permitAll()
+                .antMatchers("/health").permitAll()
+                .antMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         
         return http.build();
     }

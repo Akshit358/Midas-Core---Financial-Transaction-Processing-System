@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -146,7 +147,7 @@ public class TransactionService {
         outgoing.addAll(incoming);
         return outgoing.stream()
                 .sorted((t1, t2) -> t2.getCreatedAt().compareTo(t1.getCreatedAt()))
-                .toList();
+                .collect(Collectors.toList());
     }
     
     public List<Transaction> getTransactionsByStatus(TransactionStatus status) {

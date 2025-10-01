@@ -225,8 +225,12 @@
                                 <option value="WITHDRAWAL">Withdrawal</option>
                                 <option value="TRANSFER">Transfer</option>
                             </select>
-                            <input type="text" id="fromAccount" placeholder="From Account (for withdrawal/transfer)">
-                            <input type="text" id="toAccount" placeholder="To Account (for deposit/transfer)">
+                            <select id="fromAccount">
+                                <option value="">From Account (for withdrawal/transfer)</option>
+                            </select>
+                            <select id="toAccount">
+                                <option value="">To Account (for deposit/transfer)</option>
+                            </select>
                             <input type="number" id="amount" placeholder="Amount" step="0.01" min="0">
                             <input type="text" id="description" placeholder="Description">
                             <button class="btn btn-primary" onclick="processTransaction()">
@@ -391,6 +395,6 @@
         </div>
     </footer>
 
-    <script src="/js/script.js"></script>
+    <script src="/js/script.js?v=3"></script>
 </body>
 </html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midas Core - Transfer Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; text-align: center; }
+        .form-group { margin: 15px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        select, input { 
+            width: 100%; 
+            padding: 10px; 
+            margin-bottom: 10px; 
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button { 
+            background: #007bff; 
+            color: white; 
+            padding: 12px 24px; 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover { background: #0056b3; }
+        .result { 
+            margin: 20px 0; 
+            padding: 15px; 
+            background: #f8f9fa; 
+            border: 1px solid #dee2e6; 
+            border-radius: 4px;
+        }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .account-info {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .loading { text-align: center; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏦 Midas Core - Transfer Test</h1>
+        <p style="text-align: center; color: #666;">Test the transfer functionality between accounts</p>
+        
+        <div class="account-info">
+            <h3>Available Accounts:</h3>
+            <div id="accountList" class="loading">Loading accounts...</div>
+        </div>
+        
+        <form id="transferForm">
+            <div class="form-group">
+                <label for="fromAccount">From Account:</label>
+                <select id="fromAccount" required>
+                    <option value="">Select From Account</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="toAccount">To Account:</label>
+                <select id="toAccount" required>
+                    <option value="">Select To Account</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="amount">Amount ($):</label>
+                <input type="number" id="amount" placeholder="Enter amount" step="0.01" min="0.01" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <input type="text" id="description" placeholder="Enter description (optional)">
+            </div>
+            
+            <button type="submit">💸 Process Transfer</button>
+        </form>
+        
+        <div id="result" class="result" style="display: none;"></div>
+        
+        <div class="account-info">
+            <h3>Recent Transactions:</h3>
+            <div id="transactionList" class="loading">Loading transactions...</div>
+        </div>
+    </div>
+    
+    <script>
+        let accounts = [];
+        
+        // Load accounts when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAccounts();
+            loadTransactions();
+        });
+        
+        // Handle form submission
+        document.getElementById('transferForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            processTransfer();
+        });
+        
+        async function loadAccounts() {
+            try {
+                const response = await fetch('/api/v1/accounts');
+                accounts = await response.json();
+                
+                const fromSelect = document.getElementById('fromAccount');
+                const toSelect = document.getElementById('toAccount');
+                const accountList = document.getElementById('accountList');
+                
+                // Clear existing options
+                fromSelect.innerHTML = '<option value="">Select From Account</option>';
+                toSelect.innerHTML = '<option value="">Select To Account</option>';
+                
+                // Display account list
+                accountList.innerHTML = accounts.map(account => 
+                    `<div><strong>${account.accountNumber}</strong> - ${account.accountType} - $${account.balance} ${account.currency}</div>`
+                ).join('');
+                
+                // Add account options to dropdowns
+                accounts.forEach(account => {
+                    const option = `<option value="${account.accountNumber}">${account.accountNumber} (${account.accountType} - $${account.balance})</option>`;
+                    fromSelect.innerHTML += option;
+                    toSelect.innerHTML += option;
+                });
+                
+                console.log('Accounts loaded:', accounts);
+            } catch (error) {
+                console.error('Failed to load accounts:', error);
+                showResult('Failed to load accounts: ' + error.message, 'error');
+            }
+        }
+        
+        async function loadTransactions() {
+            try {
+                const response = await fetch('/api/v1/transactions/customer/1');
+                const transactions = await response.json();
+                
+                const transactionList = document.getElementById('transactionList');
+                
+                if (transactions.length === 0) {
+                    transactionList.innerHTML = '<div>No transactions found</div>';
+                } else {
+                    transactionList.innerHTML = transactions.slice(0, 5).map(transaction => 
+                        `<div style="margin: 5px 0; padding: 5px; background: white; border-radius: 3px;">
+                            <strong>${transaction.transactionType}</strong> - $${transaction.amount} - ${transaction.status}<br>
+                            <small>${transaction.description} - ${new Date(transaction.createdAt).toLocaleString()}</small>
+                        </div>`
+                    ).join('');
+                }
+            } catch (error) {
+                console.error('Failed to load transactions:', error);
+                document.getElementById('transactionList').innerHTML = '<div>Failed to load transactions</div>';
+            }
+        }
+        
+        async function processTransfer() {
+            const fromAccount = document.getElementById('fromAccount').value;
+            const toAccount = document.getElementById('toAccount').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const description = document.getElementById('description').value;
+            
+            if (!fromAccount || !toAccount) {
+                showResult('Please select both from and to accounts', 'error');
+                return;
+            }
+            
+            if (!amount || amount <= 0) {
+                showResult('Please enter a valid amount greater than 0', 'error');
+                return;
+            }
+            
+            if (fromAccount === toAccount) {
+                showResult('Cannot transfer to the same account', 'error');
+                return;
+            }
+            
+            // Check if from account has sufficient balance
+            const fromAccountData = accounts.find(acc => acc.accountNumber === fromAccount);
+            if (fromAccountData && fromAccountData.balance < amount) {
+                showResult(`Insufficient funds. Available balance: $${fromAccountData.balance}`, 'error');
+                return;
+            }
+            
+            try {
+                showResult('Processing transfer...', 'loading');
+                
+                const response = await fetch('/api/v1/transactions/transfer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        fromAccountNumber: fromAccount,
+                        toAccountNumber: toAccount,
+                        amount: amount,
+                        description: description || 'Transfer transaction'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResult(`✅ Transfer successful!<br>Transaction ID: ${result.transactionId}<br>Amount: $${result.amount}`, 'success');
+                    // Reload accounts and transactions to show updated data
+                    loadAccounts();
+                    loadTransactions();
+                    // Clear form
+                    document.getElementById('transferForm').reset();
+                } else {
+                    showResult(`❌ Transfer failed: ${result.message || result.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('Transfer error:', error);
+                showResult('❌ Transfer failed: ' + error.message, 'error');
+            }
+        }
+        
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = message;
+            resultDiv.className = `result ${type}`;
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
+
